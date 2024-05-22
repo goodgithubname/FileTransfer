@@ -10,9 +10,9 @@ uploaded_dir = 'uploaded'
 for directory in [transfer_dir, uploaded_dir]:
     if not os.path.exists(directory):
         os.makedirs(directory)
-        
+
 # Server address
-server_address = ('localhost', 12345)
+server_address = ('192.168.68.107', 12345)
 
 # List all files in the transfer directory
 for filename in os.listdir(transfer_dir):
@@ -30,7 +30,8 @@ for filename in os.listdir(transfer_dir):
 
     try:
         # Send file name and size
-        sock.sendall(filename.encode() + b'\n' + str(filesize).encode() + b'\n')
+        sock.sendall((filename + '\n').encode())
+        sock.sendall((str(filesize) + '\n').encode())
         with open(filepath, 'rb') as f:
             # Send file content
             while True:
