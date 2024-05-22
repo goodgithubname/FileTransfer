@@ -6,6 +6,11 @@ import socket
 transfer_dir = 'transfer'
 uploaded_dir = 'uploaded'
 
+# Check if directories exist, if not, create them
+for directory in [transfer_dir, uploaded_dir]:
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+        
 # Server address
 server_address = ('localhost', 12345)
 

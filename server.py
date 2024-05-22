@@ -20,6 +20,10 @@ while True:
     # wait for connection
     connection, client_address = sock.accept()
 
+    # Check if directory exists, if not, create it
+    if not os.path.exists(uploaded_dir):
+        os.makedirs(uploaded_dir)
+
     try:
         # Receive the file name and size
         filename = connection.recv(1024).decode().strip()
