@@ -7,8 +7,22 @@ uploaded_dir = 'uploaded'
 #  Create TCP/IP socket
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
+# function to get outbound ip
+def get_outbound_ip():
+    # Connect to a remote server on port 80 (http)
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        # Doesn't matter if this address is reachable
+        sock.connect(('10.255.255.255', 1))
+        ip = sock.getsockname()[0]
+    except Exception:
+        ip = '127.0.0.1'
+    finally:
+        sock.close()
+    return ip
+
 # Bind the socket to the address and port
-server_address = ('localhost', 12345)
+server_address = (get_outbound_ip(), 12345)
 print('Starting up on {} port {}'.format(*server_address))
 sock.bind(server_address)
 
