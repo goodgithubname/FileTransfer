@@ -1,6 +1,7 @@
 import os
 import shutil
 import socket
+from dotenv import load_dotenv
 
 # Define directory paths
 transfer_dir = 'transfer'
@@ -12,7 +13,8 @@ for directory in [transfer_dir, uploaded_dir]:
         os.makedirs(directory)
 
 # Server address
-server_address = ('192.168.68.107', 12345)
+IP_ADDRESS = os.getenv('IP_ADDRESS')
+server_address = (IP_ADDRESS, 12345)
 
 # List all files in the transfer directory
 for filename in os.listdir(transfer_dir):
@@ -20,7 +22,7 @@ for filename in os.listdir(transfer_dir):
     
     # Get file size
     filesize = os.path.getsize(filepath)
-    print('File size: {filesize} bytes')
+    print('File size: ' + str(filesize) + ' bytes')
 
     # Creating a TCP/IP socket
     sock=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -31,7 +33,10 @@ for filename in os.listdir(transfer_dir):
     try:
         # Send file name and size
         sock.sendall((filename + '\n').encode())
+        print(f"Sending file size: {filesize}")
         sock.sendall((str(filesize) + '\n').encode())
+
+        print(filesize)
         with open(filepath, 'rb') as f:
             # Send file content
             while True:

@@ -40,9 +40,14 @@ while True:
 
     try:
         # Receive the file name and size
-        filename = connection.recv(1024).decode().strip()
-        filesize = int(connection.recv(1024).decode().strip())
-        
+        received = connection.recv(1024).decode().strip()
+        print(received)
+        filename, received_filesize, _ = received.split('\n', 2)
+        print(f"Received filename: {filename}")
+        print(f"Received filesize: {received_filesize}")
+        filesize = int(received_filesize)
+        print(f"Sending file size: {filesize}")
+
         print('request for {}, {}'.format(filename, filesize))
         # Receive the file data
         data = b''
