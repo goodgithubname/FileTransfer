@@ -52,7 +52,10 @@ while True:
         print(f"Sending file size: {filesize}")
 
         print('request for {}, {}'.format(filename, filesize))
-        # Receive the file data
+        
+        # Send ACK to client
+        connection.sendall(b'ACK')
+
         data = b''
         while len(data) < filesize:
             chunk = connection.recv(1024)

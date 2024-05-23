@@ -39,8 +39,11 @@ for filename in os.listdir(transfer_dir):
         sock.sendall((filename + '\n').encode())
         print(f"Sending file size: {filesize}")
         sock.sendall((str(filesize) + '\n').encode())
-
         print(filesize)
+
+        # Wait for ACK
+        ack = sock.recv(1024)
+
         with open(filepath, 'rb') as f:
             # Send file content
             while True:
