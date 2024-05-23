@@ -1,5 +1,6 @@
 import os
 import socket
+import time
 
 # Define directory paths
 uploaded_dir = 'uploaded'
@@ -43,9 +44,8 @@ while True:
 
     try:
         # Receive the file name and size
-        received = connection.recv(1024).decode().strip()
-        print(received)
-        filename, received_filesize, _ = received.split('\n', 2)
+        filename = connection.recv(65536).decode().strip()
+        received_filesize = connection.recv(65536).decode().strip()
         print(f"Received filename: {filename}")
         print(f"Received filesize: {received_filesize}")
         filesize = int(received_filesize)
@@ -57,11 +57,18 @@ while True:
         connection.sendall(b'ACK')
 
         data = b''
+        print('0/{}'.format(filesize))
+        start_time = time.time()
         while len(data) < filesize:
-            chunk = connection.recv(1024)
+            chunk = connection.recv(65536)
             if not chunk:
                 break
             data += chunk
+            elapsed_time = time.time() - start_time
+            transfer_rate = len(data) / elapsed_time
+            remaining_data = filesize - len(data)
+            estimated_time = remaining_data / transfer_rate
+            print('\r{}/{} bytes received, estimated time remaining: {:.2f} seconds'.format(len(data), filesize, estimated_time), end='')
 
         # Write the file data to a file
         with open(os.path.join(uploaded_dir, filename), 'wb') as f:
