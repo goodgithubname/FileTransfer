@@ -12,8 +12,12 @@ for directory in [transfer_dir, uploaded_dir]:
     if not os.path.exists(directory):
         os.makedirs(directory)
 
+# Load .env
+load_dotenv()
+
 # Server address
 IP_ADDRESS = os.getenv('IP_ADDRESS')
+print(IP_ADDRESS)
 server_address = (IP_ADDRESS, 12345)
 
 # List all files in the transfer directory

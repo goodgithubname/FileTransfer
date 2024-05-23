@@ -4,6 +4,9 @@ import socket
 # Define directory paths
 uploaded_dir = 'uploaded'
 
+if not os.path.exists(uploaded_dir):
+    os.makedirs(uploaded_dir)
+
 #  Create TCP/IP socket
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
